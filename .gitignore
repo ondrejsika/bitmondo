@@ -1,0 +1,10 @@
+*.egg-info
+*.pyc
+*.sqlite3
+
+.env
+.idea
+
+static
+
+

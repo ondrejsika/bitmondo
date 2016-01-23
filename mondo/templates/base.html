@@ -1,0 +1,32 @@
+{% extends 'bootstrap/base.html' %}
+{% block title %}BitMondo{% endblock %}
+{% block body %}
+    <div class="container" style="margin-top: 10px; max-width: 730px">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+              {% if request.session.account_id %}
+                  <li role="presentation">
+                    <p class="navbar-text" style="margin-top: 10px"><b>{{ account.username }}</b></p>
+                  </li>
+                  <li role="presentation"><a href="{% url 'mondo:logout' %}">logout</a></li>
+                  <li role="presentation"><a href="{% url 'mondo:deactivate' %}">deactivate</a></li>
+              {% else %}
+                  <li role="presentation"><a href="{{ mondo_auth_url }}">Login</a></li>
+              {% endif %}
+          </ul>
+        </nav>
+        <h3 class="text-muted" style="margin-top: 10px">BitMondo</h3>
+      </div>
+
+      <div class="jumbotron">
+          {% block content %}{% endblock content %}
+      </div>
+
+
+      <footer class="footer">
+        <p>By <a target="_blank" href="https://ondrejsika.com">Ondrej Sika</a> with <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> at <b>London</b></p>
+      </footer>
+
+    </div> <!-- /container -->
+{% endblock body %}

@@ -1,11 +1,21 @@
-{% if request.session.account_id %}
-    <b>{{ account.username }}</b>
-    <a href="{% url 'mondo:logout' %}">logout</a>
-    <a href="{% url 'mondo:deactivate' %}">deactivate</a>
-
-    {% for address in addresses %}
-    {{ address.address }}
-    {% endfor %}
-{% else %}
-    <a href="{{ mondo_auth_url }}">login to mondo</a>
-{% endif %}
+{% extends 'base.html' %}
+{% block content %}
+    {% if request.session.account_id %}
+        <table class="table">
+            <tr>
+                <form class="form-inline">
+                    <td><input type="text" class="form-control" id="exampleInputName2" placeholder="Bitcoin address"></td>
+                    <td><button type="submit" class="btn btn-success">Add Bitcoin address</button></td>
+                </form>
+            </tr>
+            {% for address in addresses %}
+            <tr>
+                <td>{{ address.address }}</td>
+                <td><a href="" class="btn btn-danger">Remove Bitcoin address</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <center><a class="btn btn-lg btn-success" href="{{ mondo_auth_url }}" role="button">Login</a></center>
+    {% endif %}
+{% endblock content %}

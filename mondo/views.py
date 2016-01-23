@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 
 from libmondo import MondoOauthClient, MondoSessionClient
 from libbitmondo import BitMondoClient
+from libbitcoin import get_balance
 
 from mondo.models import MondoAccount, BitcoinAddress
 
@@ -48,21 +49,13 @@ def authorize_view(request):
     account.token = token
     account.save()
     request.session['account_id'] = account.id
-
-    # bitmondo = BitMondoClient(mondo_session, account_id)
-    # bitmondo.incoming_payment('1Bdii7sGaE2i6AFUPThTCoFsXWKJdSJ955',
-    #                           '1MNe417Sx3WGtbdcZg2v8wnBPodkbsL1R8',
-    #                           6.543,
-    #                           '16aef80dd4cfd5fe717f19151f9bd9491b13c30171bacdd96a6ab6366459fbe')
-    # bitmondo.outgoing_payment('1Bdii7sGaE2i6AFUPThTCoFsXWKJdSJ955',
-    #                           '1MNe417Sx3WGtbdcZg2v8wnBPodkbsL1R8',
-    #                           6.543,
-    #                           '16aef80dd4cfd5fe717f19151f9bd9491b13c30171bacdd96a6ab6366459fbe')
     return HttpResponseRedirect(reverse('mondo:home'))
+
 
 def logout_view(request):
     del request.session['account_id']
     return HttpResponseRedirect(reverse('mondo:home'))
+
 
 def deactivate_view(request):
     account, created = MondoAccount.objects.get_or_create(
@@ -71,4 +64,23 @@ def deactivate_view(request):
     account.delete()
 
     del request.session['account_id']
+    return HttpResponseRedirect(reverse('mondo:home'))
+
+
+def address_add_view(request):
+    account = MondoAccount.objects.get(id=request.session.get('account_id'))
+
+    raw_address = request.POST.get('address')
+    address, created = BitcoinAddress.objects.get_or_create(account=account, address=raw_address,
+                                                            last_balance=get_balance(raw_address))
+    address.save()
+    return HttpResponseRedirect(reverse('mondo:home'))
+
+
+def address_remove_view(request):
+    account = MondoAccount.objects.get(id=request.session.get('account_id'))
+
+    raw_address = request.GET.get('address')
+    address = BitcoinAddress.objects.get(account=account, address=raw_address)
+    address.delete()
     return HttpResponseRedirect(reverse('mondo:home'))

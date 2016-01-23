@@ -3,15 +3,16 @@
     {% if request.session.account_id %}
         <table class="table">
             <tr>
-                <form class="form-inline">
-                    <td><input type="text" class="form-control" id="exampleInputName2" placeholder="Bitcoin address"></td>
+                <form class="form-inline" method="post" action="{% url 'mondo:address_add' %}">
+                    {% csrf_token %}
+                    <td><input type="text" class="form-control" id="exampleInputName2" placeholder="Bitcoin address" name="address"></td>
                     <td><button type="submit" class="btn btn-success">Add Bitcoin address</button></td>
                 </form>
             </tr>
             {% for address in addresses %}
             <tr>
                 <td>{{ address.address }}</td>
-                <td><a href="" class="btn btn-danger">Remove Bitcoin address</a></td>
+                <td><a href="{% url 'mondo:address_remove' %}?address={{ address.address }}" class="btn btn-danger">Remove Bitcoin address</a></td>
             </tr>
             {% endfor %}
         </table>

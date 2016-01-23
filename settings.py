@@ -1,5 +1,8 @@
 import os
 
+import settings_local
+
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 SECRET_KEY = '@)#)^e@-66*e9+m#srm)c3)0)4*o)y=#0@$wt6wis6wt@glx2@'
@@ -71,8 +74,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'static')
 
-MONDO_AUTH_URL = 'https://staging-auth.getmondo.co.uk'
-MONDO_API_URL = 'https://staging-api.getmondo.co.uk'
-MONDO_CLIENT_ID = 'oauthclient_000094RmbmkvjhMwyzx0Gf'
-MONDO_CLIENT_SECRET = 'aZ/XRhXQrAhAbzuHUIQi3HIoDi8mlKxa9htThSi0vGKChNS3WFLwQC7AdvHtFO6tgGTGY3VaTsfecD2hG+tE'
-MONDO_REDIRECT_URL = 'http://localhost:8000/mondo/authorize/'
+MONDO_AUTH_URL = settings_local.MONDO_AUTH_URL
+MONDO_API_URL = settings_local.MONDO_API_URL
+MONDO_CLIENT_ID = settings_local.MONDO_CLIENT_ID
+MONDO_CLIENT_SECRET = settings_local.MONDO_CLIENT_SECRET
+MONDO_REDIRECT_URL = settings_local.MONDO_REDIRECT_URL

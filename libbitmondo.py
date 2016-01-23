@@ -13,7 +13,7 @@ class BitMondoClient(object):
         self._mondo_session.create_feed_item(
             self._account_id,
             'Bitcoin tx %s BTC' % amount_btc,
-            'from %s to %s' % (from_address, to_address),
+            'from %s to %s' % (shorten_address(from_address), shorten_address(to_address)),
             BITCOIN_IMG_URL,
             'https://blockchain.info/tx/%s' % tx_id,
             '#008000',

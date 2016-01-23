@@ -1,4 +1,18 @@
 from django.db import models
+from django.conf import settings
+
+from libbitmondo import BitMondoClient
+from libmondo import MondoSessionClient, MondoOauthClient
+from libbitcoin import satoshi_to_btc
+
+
+mondo_client = MondoOauthClient(
+    settings.MONDO_AUTH_URL,
+    settings.MONDO_API_URL,
+    settings.MONDO_CLIENT_ID,
+    settings.MONDO_CLIENT_SECRET,
+    settings.MONDO_REDIRECT_URL,
+)
 
 
 class MondoAccount(models.Model):
@@ -13,6 +27,22 @@ class MondoAccount(models.Model):
 class BitcoinAddress(models.Model):
     account = models.ForeignKey(MondoAccount)
     address = models.CharField(max_length=40)
+    last_balance = models.IntegerField()
 
     def __unicode__(self):
-        return u'%s %s' % (self.account, self.address)
+        return u'%s %s %s' % (self.account, self.address, self.last_balance)
+
+    def send_notification(self, balance):
+        change = satoshi_to_btc(balance - self.last_balance)
+        mondo_session = MondoSessionClient(mondo_client, self.account.token)
+        bitmondo = BitMondoClient(mondo_session, self.account.account_id)
+        if change > 0:
+            bitmondo.incoming_payment('1Bdii7sGaE2i6AFUPThTCoFsXWKJdSJ955',
+                                      '1MNe417Sx3WGtbdcZg2v8wnBPodkbsL1R8',
+                                      change,
+                                      '16aef80dd4cfd5fe717f19151f9bd9491b13c30171bacdd96a6ab6366459fbe')
+        else:
+            bitmondo.outgoing_payment('1Bdii7sGaE2i6AFUPThTCoFsXWKJdSJ955',
+                                      '1MNe417Sx3WGtbdcZg2v8wnBPodkbsL1R8',
+                                      -change,
+                                      '16aef80dd4cfd5fe717f19151f9bd9491b13c30171bacdd96a6ab6366459fbe')

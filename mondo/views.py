@@ -59,8 +59,9 @@ def logout_view(request):
 
 def deactivate_view(request):
     account, created = MondoAccount.objects.get_or_create(
-        username=request.session['account_id'],
+        id=request.session['account_id'],
     )
+    account.bitcoinaddress_set.all().delete()
     account.delete()
 
     del request.session['account_id']

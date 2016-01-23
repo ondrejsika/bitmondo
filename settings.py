@@ -71,7 +71,7 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'static')
 
 MONDO_AUTH_URL = settings_local.MONDO_AUTH_URL

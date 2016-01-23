@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from mondo.models import MondoAccount, BitcoinAddress
+
+
+admin.site.register(MondoAccount)
+admin.site.register(BitcoinAddress)
+

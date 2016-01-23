@@ -1,1 +1,11 @@
-<a href="{{ mondo_auth_url }}">mondo</a>
+{% if request.session.account_id %}
+    <b>{{ account.username }}</b>
+    <a href="{% url 'mondo:logout' %}">logout</a>
+    <a href="{% url 'mondo:deactivate' %}">deactivate</a>
+
+    {% for address in addresses %}
+    {{ address.address }}
+    {% endfor %}
+{% else %}
+    <a href="{{ mondo_auth_url }}">login to mondo</a>
+{% endif %}

@@ -1,0 +1,2 @@
+def cron():
+    print 'hello'

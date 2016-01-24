@@ -32,11 +32,11 @@ class BitcoinAddress(models.Model):
     def __unicode__(self):
         return u'%s %s %s' % (self.account, self.address, self.last_balance)
 
-    def send_notification(self, balance, last_tx):
+    def send_notification(self, balance, tx_id):
         change = satoshi_to_btc(balance - self.last_balance)
         mondo_session = MondoSessionClient(mondo_client, self.account.token)
         bitmondo = BitMondoClient(mondo_session, self.account.account_id)
         if change > 0:
-            bitmondo.incoming_payment(change, last_tx)
+            bitmondo.incoming_payment(change, self.address, tx_id)
         else:
-            bitmondo.outgoing_payment(-change, last_tx)
+            bitmondo.outgoing_payment(-change, self.address, tx_id)
